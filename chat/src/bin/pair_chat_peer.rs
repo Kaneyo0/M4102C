@@ -21,7 +21,6 @@ fn main() -> Result<()>{
     let my_arc_clone = my_arc.clone();
     let my_thread = thread::spawn(move || {
         my_arc_clone.write();
-        
     });
     my_arc.listen();
     return Ok(());

@@ -1,4 +1,5 @@
 use std::net::{SocketAddr, UdpSocket};
+use std::str;
 use crate::actors::{Listener, Writer};
 use crate::{Result, BUFFER_SIZE, ContentsMessage, IdMessage};
 
@@ -19,7 +20,7 @@ impl ChatClient {
 impl Listener for ChatClient {
     fn listen(&self) -> Result<()>{
         let mut buf = [0 ; BUFFER_SIZE];
-        while let Ok((nb_bytes, sender_endpoint)) = self.socket.recv_from(&mut buf) {
+        while let Ok((nb_bytes, sender_endpoint)) = self.server_endpoint.recv_from(&mut buf) {
             let my_message = str::from_utf8(&buf[0..nb_bytes])?;
             println!("{:?}", my_message);
         }
@@ -29,7 +30,8 @@ impl Listener for ChatClient {
 
 impl Writer for ChatClient {  
     fn dispatch_line(&self, line: &str) -> Result<()>{
-        self.socket.send_to(line.as_bytes(), self.peer_endpoint)?;
+        let message = line.split(":");
+        if (message[0] )
         return Ok(());
     }
     
